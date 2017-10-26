@@ -96,7 +96,7 @@
   <ItemGroup>
     <Compile Include="BehaviourExtensions\NlogBehaviourExtensionElement.vb" />
     <Compile Include="ErrorHandlers\NlogErrorHandler.vb" />
-    <Compile Include="Loggable\LoggingWcfService.vb" />
+    <Compile Include="Base\NlogWcfService.vb" />
     <Compile Include="Service1.svc.vb">
       <DependentUpon>Service1.svc</DependentUpon>
     </Compile>

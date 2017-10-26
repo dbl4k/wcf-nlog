@@ -1,7 +1,7 @@
 ﻿' NOTE: You can use the "Rename" command on the context menu to change the class name "Service1" in code, svc and config file together.
 ' NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.vb at the Solution Explorer and start debugging.
 Public Class Service1
-    Inherits LoggingWcfService
+    Inherits NlogWcfService
     Implements IService1
 
     Public Sub New()
@@ -18,7 +18,7 @@ Public Class Service1
         If composite.BoolValue Then
             composite.StringValue &= "Suffix"
         End If
-        logger.Log(NLog.LogLevel.Info, "logging is working?")
+        Logger.Log(NLog.LogLevel.Info, "logging is working?")
         Throw New Exception("intentional, don't panic")
         Return composite
     End Function
