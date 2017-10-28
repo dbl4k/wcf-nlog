@@ -15,4 +15,13 @@ Public Class NlogErrorHandler : Implements IErrorHandler
 
         Return False ' Don't break excepton handling
     End Function
+
+    Public Function getCurrentContext() As OperationContext
+        Dim result As OperationContext = Nothing
+
+        result = OperationContext.Current
+
+        Return result
+    End Function
+
 End Class
