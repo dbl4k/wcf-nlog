@@ -13,7 +13,18 @@ Public Class NlogErrorHandler : Implements IErrorHandler
     Public Function HandleError([error] As Exception) As Boolean Implements IErrorHandler.HandleError
         mLogger.Log(LogLevel.Error, [error])
 
-        Return False ' Don't break excepton handling
+        Return False ' Don't break exception handling.
+    End Function
+
+    Private Function getContextMessage(context As OperationContext) As String
+        Dim result As New StringBuilder(String.Empty)
+
+        With result
+            .AppendLine(context.RequestContext.RequestMessage.ToString)
+        End With
+
+
+        Return result.ToString()
     End Function
 
     Public Function getCurrentContext() As OperationContext
