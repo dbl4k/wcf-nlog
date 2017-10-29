@@ -6,6 +6,9 @@ Public Interface IService1
     Function GetData(ByVal value As Integer) As String
 
     <OperationContract()>
+    Function DoSomethingDatelike(ByVal value As Date) As String
+
+    <OperationContract()>
     Function GetDataUsingDataContract(ByVal composite As CompositeType) As CompositeType
 
     ' TODO: Add your service operations here
