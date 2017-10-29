@@ -73,6 +73,25 @@ When using an incorrect element name to refer to a method, such as "DoSomethingD
    at System.ServiceModel.Dispatcher.MessageRpc.Process(Boolean isOperationContextSet)
 ```
 
+If you hit an unhandled exception within your code.
+
+```
+2017-10-29 09:44:17.3573 ERROR System.Exception: intentional, don't panic
+   at nlogWcfTest.Service1.GetDataUsingDataContract(CompositeType composite) in C:\Users\andre\documents\visual studio 2017\Projects\nlogWcfTest\nlogWcfTest\Service1.svc.vb:line 24
+   at SyncInvokeGetDataUsingDataContract(Object , Object[] , Object[] )
+   at System.ServiceModel.Dispatcher.SyncMethodInvoker.Invoke(Object instance, Object[] inputs, Object[]& outputs)
+   at System.ServiceModel.Dispatcher.DispatchOperationRuntime.InvokeBegin(MessageRpc& rpc)
+   at System.ServiceModel.Dispatcher.ImmutableDispatchRuntime.ProcessMessage5(MessageRpc& rpc)
+   at System.ServiceModel.Dispatcher.ImmutableDispatchRuntime.ProcessMessage41(MessageRpc& rpc)
+   at System.ServiceModel.Dispatcher.ImmutableDispatchRuntime.ProcessMessage4(MessageRpc& rpc)
+   at System.ServiceModel.Dispatcher.ImmutableDispatchRuntime.ProcessMessage31(MessageRpc& rpc)
+   at System.ServiceModel.Dispatcher.ImmutableDispatchRuntime.ProcessMessage3(MessageRpc& rpc)
+   at System.ServiceModel.Dispatcher.ImmutableDispatchRuntime.ProcessMessage2(MessageRpc& rpc)
+   at System.ServiceModel.Dispatcher.ImmutableDispatchRuntime.ProcessMessage11(MessageRpc& rpc)
+   at System.ServiceModel.Dispatcher.ImmutableDispatchRuntime.ProcessMessage1(MessageRpc& rpc)
+   at System.ServiceModel.Dispatcher.MessageRpc.Process(Boolean isOperationContextSet)
+```
+
 Enjoy!
 
 - dbl4k
