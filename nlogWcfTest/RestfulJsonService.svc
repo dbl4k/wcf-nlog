@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="VB" Debug="true" Service="nlogWcfTest.RestfulJsonService" CodeBehind="RestfulJsonService.svc.vb" %>

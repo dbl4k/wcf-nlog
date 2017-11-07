@@ -92,11 +92,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="RegularSoapService.svc" />
+    <Content Include="RestfulJsonService.svc" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BehaviourExtensions\NlogMessageInspectorBehaviourExtensionElement.vb" />
     <Compile Include="BehaviourExtensions\NlogBehaviourExtensionElement.vb" />
+    <Compile Include="IRestfulJsonService.vb" />
+    <Compile Include="RestfulJsonService.svc.vb">
+      <DependentUpon>RestfulJsonService.svc</DependentUpon>
+    </Compile>
     <Compile Include="ServiceBehaviours\NlogMessageInspectorBehaviour.vb" />
     <Compile Include="ErrorHandlers\NlogErrorHandler.vb" />
     <Compile Include="Base\NlogWcfService.vb" />
