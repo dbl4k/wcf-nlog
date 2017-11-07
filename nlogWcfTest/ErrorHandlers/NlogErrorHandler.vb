@@ -4,7 +4,7 @@ Imports NLog
 
 Public Class NlogErrorHandler : Implements IErrorHandler
 
-    Private Shared mLogger As Logger = LogManager.GetLogger("NLogErrorHandler")
+    Private Shared mLogger As Logger = LogManager.GetLogger("UnhandledError")
 
     Public Sub ProvideFault([error] As Exception, version As MessageVersion, ByRef fault As Message) Implements IErrorHandler.ProvideFault
         ' Not used
@@ -14,25 +14,6 @@ Public Class NlogErrorHandler : Implements IErrorHandler
         mLogger.Log(LogLevel.Error, [error])
 
         Return False ' Don't break exception handling.
-    End Function
-
-    Private Function getContextMessage(context As OperationContext) As String
-        Dim result As New StringBuilder(String.Empty)
-
-        With result
-            .AppendLine(context.RequestContext.RequestMessage.ToString)
-        End With
-
-
-        Return result.ToString()
-    End Function
-
-    Public Function getCurrentContext() As OperationContext
-        Dim result As OperationContext = Nothing
-
-        result = OperationContext.Current
-
-        Return result
     End Function
 
 End Class
