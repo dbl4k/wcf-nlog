@@ -1,6 +1,6 @@
-﻿' NOTE: You can use the "Rename" command on the context menu to change the interface name "IService1" in both code and config file together.
+﻿' NOTE: You can use the "Rename" command on the context menu to change the interface name "IRegularSoapService" in both code and config file together.
 <ServiceContract()>
-Public Interface IService1
+Public Interface IRegularSoapService
 
     <OperationContract()>
     Function GetData(ByVal value As Integer) As String

@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="VB" Debug="true" Service="nlogWcfTest.RegularSoapService" CodeBehind="RegularSoapService.svc.vb" %>

@@ -91,7 +91,7 @@
     <Import Include="System.Web.UI.HtmlControls" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Service1.svc" />
+    <Content Include="RegularSoapService.svc" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -101,10 +101,10 @@
     <Compile Include="ErrorHandlers\NlogErrorHandler.vb" />
     <Compile Include="Base\NlogWcfService.vb" />
     <Compile Include="Inspectors\NlogMessageInspector.vb" />
-    <Compile Include="Service1.svc.vb">
-      <DependentUpon>Service1.svc</DependentUpon>
+    <Compile Include="RegularSoapService.svc.vb">
+      <DependentUpon>RegularSoapService.svc</DependentUpon>
     </Compile>
-    <Compile Include="IService1.vb" />
+    <Compile Include="IRegularSoapService.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
