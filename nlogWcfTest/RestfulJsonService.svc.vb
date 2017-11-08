@@ -1,11 +1,13 @@
-﻿' NOTE: You can use the "Rename" command on the context menu to change the class name "RestfulJsonService" in code, svc and config file together.
-' NOTE: In order to launch WCF Test Client for testing this service, please select RestfulJsonService.svc or RestfulJsonService.svc.vb at the Solution Explorer and start debugging.
+﻿Imports NLog
+
 Public Class RestfulJsonService
     Inherits NlogWcfService
     Implements IRestfulJsonService
 
     Protected Friend Class Messages
         Public Const E_InvalidIdentity As String = "You supplied an invalid Id '{0}'."
+        Public Const E_InvalidValue As String = "You supplied an invalid value '{0}', expected {1}."
+
     End Class
 
     Private num_entities As Integer = 10
@@ -27,12 +29,22 @@ Public Class RestfulJsonService
     Public Function Get_Entity_ById(id As String) As Entity Implements IRestfulJsonService.Get_Entity_ById
         Dim result As Entity = Nothing
 
-        Dim cleaned_int As Integer = Convert.ToInt32(id)
+        Dim cleaned_int As Integer
+
+        Try
+            cleaned_int = Convert.ToInt32(id)
+        Catch ex As Exception
+            Dim ex_wrapper As Exception = New InvalidCastException(String.Format(Messages.E_InvalidValue, id, GetType(Integer)), ex)
+            Logger.Log(LogLevel.Error, ex_wrapper)
+            Throw ex_wrapper
+        End Try
 
         If cleaned_int >= 1 AndAlso cleaned_int <= num_entities Then
             result = EntityFactory.GenerateEntity(cleaned_int)
         Else
-            Throw New IndexOutOfRangeException(String.Format(Messages.E_InvalidIdentity, cleaned_int))
+            Dim ex As Exception = New IndexOutOfRangeException(String.Format(Messages.E_InvalidIdentity, cleaned_int))
+            Logger.Log(LogLevel.Error, ex)
+            Throw ex
         End If
 
         Return result
