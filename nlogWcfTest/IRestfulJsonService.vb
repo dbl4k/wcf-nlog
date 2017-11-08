@@ -10,6 +10,9 @@ Public Interface IRestfulJsonService
     <OperationContract()>
     Function Get_Entity_ById(id As String) As Entity
 
+    <OperationContract()>
+    Function Post_Entity(entity As Entity) As Entity
+
 End Interface
 
 <DataContract()>
@@ -19,4 +22,7 @@ Public Class Entity
 
     <DataMember()>
     Public Property Name As String
+
+    <DataMember()>
+    Public Property CreatedDate As Date
 End Class

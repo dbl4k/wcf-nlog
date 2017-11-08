@@ -50,11 +50,23 @@ Public Class RestfulJsonService
         Return result
     End Function
 
+    ' POST : http://localhost:58958/api/Entities
+    <WebInvoke(Method:="POST", UriTemplate:="entities", RequestFormat:=WebMessageFormat.Json, ResponseFormat:=WebMessageFormat.Json)>
+    Public Function Post_Entity(entity As Entity) As Entity Implements IRestfulJsonService.Post_Entity
+        Dim result As Entity = entity
+
+        ' Just return the same object..
+
+        Return result
+    End Function
+
 #Region "Mock Factories"
 
     Public Class EntityFactory
         Public Shared Function GenerateEntity(id As Integer) As Entity
-            Return New Entity With {.Id = id, .Name = String.Concat(GetType(Entity), id)}
+            Return New Entity With {.Id = id,
+                                    .Name = String.Concat(GetType(Entity).Name, id),
+                                    .CreatedDate = Now.AddDays(0 - id)}
         End Function
     End Class
 
