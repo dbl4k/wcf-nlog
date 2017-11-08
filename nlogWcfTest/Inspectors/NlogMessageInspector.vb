@@ -9,7 +9,7 @@ Imports NLog
 Public Class NlogMessageInspector
     Implements IDispatchMessageInspector
 
-    Private Const BINARY As String = "BINARY"
+    Private Const BINARY As String = "Binary"
 
     Private Const REQUEST_RECEIVED As String = "REQUEST_RECEIVED"
     Private Const RESPONSE_SENT As String = "RESPONSE_SENT"
