@@ -13,7 +13,7 @@ Public Class JsonDateConversion
     End Class
 
     Public Class Format
-        Public Const F_JSONDATEVALUE As String = "/Date({0})/"
+        Public Const F_JSONDATEVALUE As String = "/Date({0}-0000)/"
         Friend Const F_ISO8601 As String = "yyyy-MM-ddTHH:mm:ss"
     End Class
 
