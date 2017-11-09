@@ -134,7 +134,7 @@ Public Class NlogMessageInspector
     End Function
 
     Private Function CloneMessage(reader As XmlDictionaryReader, message As Message) As Message
-        Dim result As Message = message.CreateMessage(reader, Integer.MaxValue, message.Version)
+        Dim result As Message = Message.CreateMessage(reader, Integer.MaxValue, message.Version)
 
         result.Properties.CopyProperties(message.Properties)
 
@@ -163,7 +163,7 @@ Public Class NlogMessageInspector
 
         ms.Position = 0
         Dim reader As XmlDictionaryReader = XmlDictionaryReader.CreateBinaryReader(ms, XmlDictionaryReaderQuotas.Max)
-        Dim newMessage As Message = message.CreateMessage(reader, Integer.MaxValue, message.Version)
+        Dim newMessage As Message = Message.CreateMessage(reader, Integer.MaxValue, message.Version)
         newMessage.Properties.CopyProperties(message.Properties)
         message = newMessage
 
@@ -198,23 +198,13 @@ Public Class NlogMessageInspector
         xw.Close()
 
         If isRequest Then
+            body = ConvertToJsonValueDates(body)
             ' "2012-04-21T18:25:43-05:00" -> "\/Date(1509739291460+0000)\/"
-            Dim regex As New Regex(JsonDateConversion.Patterns.ISO8601)
-            For Each match As Match In regex.Matches(body)
-                Dim dateTime As Date = JsonDateConversion.ConvertIso8601ToDate(match.Groups(0).Value)
-                Dim jsonValue As String = JsonDateConversion.ConvertDateToJsonDateValue(dateTime)
 
-                body = body.Replace(match.Groups(0).Value, jsonValue)
-            Next
         Else
+            body = ConvertToISO8601Dates(body)
             ' "\/Date(1509739291460+0000)\/" -> "2012-04-21T18:25:43-05:00"
-            Dim regex As New Regex(JsonDateConversion.Patterns.JSON_VALUE)
-            For Each match As Match In regex.Matches(body)
-                Dim dateTime As Date = JsonDateConversion.ConvertJsonDateValueToDate(match.Groups(0).Value)
-                Dim iso8601Value As String = JsonDateConversion.ConvertDateToIso8601String(dateTime)
 
-                body = body.Replace(match.Groups(0).Value, iso8601Value)
-            Next
         End If
 
         ms = New MemoryStream(Encoding.UTF8.GetBytes(body))
@@ -222,6 +212,30 @@ Public Class NlogMessageInspector
         Dim newMessage As Message = Message.CreateMessage(xdr, Integer.MaxValue, oldMessage.Version)
         newMessage.Properties.CopyProperties(oldMessage.Properties)
         Return newMessage
+    End Function
+
+    Private Function ConvertToISO8601Dates(body As String) As String
+        Dim regex As New Regex(JsonDateConversion.Patterns.JSON_VALUE)
+        For Each match As Match In regex.Matches(body)
+            Dim dateTime As Date = JsonDateConversion.ConvertJsonDateValueToDate(match.Groups(0).Value)
+            Dim iso8601Value As String = JsonDateConversion.ConvertDateToIso8601String(dateTime)
+
+            body = body.Replace(match.Groups(0).Value, iso8601Value)
+        Next
+
+        Return body
+    End Function
+
+    Private Function ConvertToJsonValueDates(body As String) As String
+        Dim regex As New Regex(JsonDateConversion.Patterns.ISO8601)
+        For Each match As Match In regex.Matches(body)
+            Dim dateTime As Date = JsonDateConversion.ConvertIso8601ToDate(match.Groups(0).Value)
+            Dim jsonValue As String = JsonDateConversion.ConvertDateToJsonDateValue(dateTime)
+
+            body = body.Replace(match.Groups(0).Value, jsonValue)
+        Next
+
+        Return body
     End Function
 
 End Class
