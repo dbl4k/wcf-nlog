@@ -36,7 +36,10 @@ Public Class JsonDateConversion
     Friend Shared Function ConvertJsonDateValueToDate(value As String) As Date
         Dim result As Date
 
-        Throw New NotImplementedException()
+        Dim timeValue As Long = Convert.ToInt64(Regex.Match(value, Patterns.JSON_VALUE).Groups(2))
+        Dim offsetValue As Long = Convert.ToInt64(Regex.Match(value, Patterns.JSON_VALUE).Groups(3))
+
+        result = Reference.UnixEpoch.AddTicks(TimeSpan.TicksPerMillisecond * timeValue)
 
         Return result
     End Function
@@ -44,7 +47,7 @@ Public Class JsonDateConversion
     Friend Shared Function ConvertDateToIso8601String(dateTime As Date) As String
         Dim result As String = Nothing
 
-        Throw New NotImplementedException()
+        result = dateTime.ToString("yyyy-MM-ddTHH:mm:ss")
 
         Return result
     End Function
