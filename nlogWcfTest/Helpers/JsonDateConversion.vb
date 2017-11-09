@@ -45,7 +45,7 @@ Public Class JsonDateConversion
             offsetValue = Convert.ToInt64(Regex.Match(value, Patterns.JSON_VALUE).Groups(3).Value)
         End If
 
-        result = New Date(timeValue * TimeSpan.TicksPerMillisecond + Reference.UnixEpoch.Ticks, DateTimeKind.Utc)
+        result = New Date(timeValue * TimeSpan.TicksPerMillisecond + Reference.UnixEpoch.Ticks, DateTimeKind.Unspecified)
 
         Return result
     End Function
@@ -53,7 +53,7 @@ Public Class JsonDateConversion
     Friend Shared Function ConvertDateToIso8601String(dateTime As Date) As String
         Dim result As String = Nothing
 
-        result = dateTime.ToString(Format.F_ISO8601)
+        result = dateTime.ToLocalTime.ToString(Format.F_ISO8601)
 
         Return result
     End Function
