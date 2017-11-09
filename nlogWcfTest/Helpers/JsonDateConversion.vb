@@ -4,7 +4,7 @@ Public Class JsonDateConversion
 
     Public Class Patterns
         Public Const ISO8601 As String = "(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})"
-        Public Const JSON_VALUE As String = "(\/Date\((\d+)(?:-(\d+))?\)\/)"
+        Public Const JSON_VALUE As String = "(\/Date\((\d+)(?:[-+](\d+))?\)\/)"
     End Class
 
     Public Class Reference
