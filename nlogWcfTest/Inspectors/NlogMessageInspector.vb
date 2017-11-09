@@ -4,6 +4,7 @@ Imports System.Runtime.Serialization.Json
 Imports System.ServiceModel.Channels
 Imports System.ServiceModel.Dispatcher
 Imports System.Xml
+Imports Newtonsoft.Json
 Imports NLog
 
 Public Class NlogMessageInspector
@@ -20,6 +21,10 @@ Public Class NlogMessageInspector
 
     Public Sub BeforeSendReply(ByRef reply As Message, correlationState As Object) Implements IDispatchMessageInspector.BeforeSendReply
         Dim builder As New StringBuilder()
+
+        If Me.GetMessageContentFormat(reply) = WebContentFormat.Json Then
+            reply = ConvertISO8601Dates(reply, isRequest:=False)
+        End If
 
         Using writer As StringWriter = New StringWriter(builder)
 
@@ -41,6 +46,12 @@ Public Class NlogMessageInspector
     End Sub
 
     Public Function AfterReceiveRequest(ByRef request As Message, channel As IClientChannel, instanceContext As InstanceContext) As Object Implements IDispatchMessageInspector.AfterReceiveRequest
+
+        If Me.GetMessageContentFormat(request) = WebContentFormat.Json Then
+            request = ConvertISO8601Dates(request, isRequest:=True)
+        End If
+
+
         Dim requestUri As Uri = request.Headers.[To]
         Dim builder As New StringBuilder()
         Using writer As StringWriter = New StringWriter(builder)
@@ -157,6 +168,60 @@ Public Class NlogMessageInspector
         message = newMessage
 
         Return messageBody
+    End Function
+
+
+    Public Function ChangeString(oldMessage As Message, from As String, [to] As String) As Message
+        Dim ms As New MemoryStream()
+        Dim xw As XmlWriter = XmlWriter.Create(ms)
+        oldMessage.WriteMessage(xw)
+        xw.Flush()
+        Dim body As String = Encoding.UTF8.GetString(ms.ToArray())
+        xw.Close()
+
+        body = body.Replace(from, [to])
+
+        ms = New MemoryStream(Encoding.UTF8.GetBytes(body))
+        Dim xdr As XmlDictionaryReader = XmlDictionaryReader.CreateTextReader(ms, New XmlDictionaryReaderQuotas())
+        Dim newMessage As Message = Message.CreateMessage(xdr, Integer.MaxValue, oldMessage.Version)
+        newMessage.Properties.CopyProperties(oldMessage.Properties)
+        Return newMessage
+    End Function
+
+
+    Public Function ConvertISO8601Dates(oldMessage As Message, isRequest As Boolean) As Message
+        Dim ms As New MemoryStream()
+        Dim xw As XmlWriter = XmlWriter.Create(ms)
+        oldMessage.WriteMessage(xw)
+        xw.Flush()
+        Dim body As String = Encoding.UTF8.GetString(ms.ToArray())
+        xw.Close()
+
+        If isRequest Then
+            ' "2012-04-21T18:25:43-05:00" -> "\/Date(1509739291460+0000)\/"
+            Dim regex As New Regex(JsonDateConversion.Patterns.ISO8601)
+            For Each match As Match In regex.Matches(body)
+                Dim dateTime As Date = JsonDateConversion.ConvertIso8601ToDate(match.Groups(0).Value)
+                Dim jsonValue As String = JsonDateConversion.ConvertDateToJsonDateValue(dateTime)
+
+                body = body.Replace(match.Groups(0).Value, jsonValue)
+            Next
+        Else
+            ' "\/Date(1509739291460+0000)\/" -> "2012-04-21T18:25:43-05:00"
+            Dim regex As New Regex(JsonDateConversion.Patterns.JSON_VALUE)
+            For Each match As Match In regex.Matches(body)
+                Dim dateTime As Date = JsonDateConversion.ConvertJsonDateValuetoDate(match.Groups(0).Value)
+                Dim iso8601Value As String = JsonDateConversion.ConvertDateToIso8601String(dateTime)
+
+                body = body.Replace(match.Groups(0).Value, iso8601Value)
+            Next
+        End If
+
+        ms = New MemoryStream(Encoding.UTF8.GetBytes(body))
+        Dim xdr As XmlDictionaryReader = XmlDictionaryReader.CreateTextReader(ms, New XmlDictionaryReaderQuotas())
+        Dim newMessage As Message = Message.CreateMessage(xdr, Integer.MaxValue, oldMessage.Version)
+        newMessage.Properties.CopyProperties(oldMessage.Properties)
+        Return newMessage
     End Function
 
 End Class
