@@ -94,6 +94,8 @@
     <Import Include="System.Web.UI.HtmlControls" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\AuthorizedAttribute.vb" />
+    <Compile Include="BehaviourExtensions\AuthorizedAttributeInspectorBehaviourExtensionElement - Copy.vb" />
     <Compile Include="Helpers\JsonDateConversion.vb" />
     <Content Include="RegularSoapService.svc" />
     <Content Include="RestfulJsonService.svc" />
@@ -104,10 +106,12 @@
   <ItemGroup>
     <Compile Include="BehaviourExtensions\NlogMessageInspectorBehaviourExtensionElement.vb" />
     <Compile Include="BehaviourExtensions\NlogBehaviourExtensionElement.vb" />
+    <Compile Include="Inspectors\AuthorizedAttributeInspector.vb" />
     <Compile Include="IRestfulJsonService.vb" />
     <Compile Include="RestfulJsonService.svc.vb">
       <DependentUpon>RestfulJsonService.svc</DependentUpon>
     </Compile>
+    <Compile Include="ServiceBehaviours\AuthorizedAttributeBehaviour.vb" />
     <Compile Include="ServiceBehaviours\NlogMessageInspectorBehaviour.vb" />
     <Compile Include="ErrorHandlers\NlogErrorHandler.vb" />
     <Compile Include="Base\NlogWcfService.vb" />

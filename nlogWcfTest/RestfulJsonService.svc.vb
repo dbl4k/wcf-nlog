@@ -63,6 +63,7 @@ Public Class RestfulJsonService
 
     ' POST : http://localhost:58958/api/Customer/666/FeedbackMessages
     <WebInvoke(Method:="POST", UriTemplate:="customer/{customerId}/feedbackmessages", RequestFormat:=WebMessageFormat.Json, ResponseFormat:=WebMessageFormat.Json)>
+    <Authorized>
     Public Function Post_Customer_FeedbackMessage(customerId As String, entity As FeedbackMessage) As FeedbackMessage Implements IRestfulJsonService.Post_Customer_FeedbackMessage
         entity.Subject &= " all good!"
         entity.ReceivedDate = New Date(2017, 6, 5).AddHours(5).AddMinutes(20)
