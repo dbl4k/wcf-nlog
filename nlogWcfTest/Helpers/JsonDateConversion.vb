@@ -1,4 +1,5 @@
-﻿Imports Runtime.Remoting.Metadata.W3cXsd2001
+﻿Imports System.Globalization
+Imports Runtime.Remoting.Metadata.W3cXsd2001
 
 Public Class JsonDateConversion
 
@@ -8,7 +9,7 @@ Public Class JsonDateConversion
     End Class
 
     Public Class Reference
-        Public Shared UnixEpoch As DateTime = New DateTime(1970, 1, 1)
+        Public Shared UnixEpoch As Date = New Date(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
     End Class
 
     Public Class Format
@@ -27,10 +28,10 @@ Public Class JsonDateConversion
     Public Shared Function ConvertDateToJsonDateValue(dateTime As Date) As String
         Dim result As String = Nothing
 
-        Dim value As Long = (dateTime - Reference.UnixEpoch).Ticks / TimeSpan.TicksPerMillisecond
-
-        result = String.Format(Format.F_JSONDATEVALUE, value)
-
+        result =
+        String.Format(Format.F_JSONDATEVALUE,
+                    ((dateTime - Reference.UnixEpoch).Ticks / TimeSpan.TicksPerMillisecond))
+        ' /Date(1496664000000+0100)/
         Return result
     End Function
 
@@ -38,9 +39,13 @@ Public Class JsonDateConversion
         Dim result As Date
 
         Dim timeValue As Long = Convert.ToInt64(Regex.Match(value, Patterns.JSON_VALUE).Groups(2).Value)
-        Dim offsetValue As Long = Convert.ToInt64(Regex.Match(value, Patterns.JSON_VALUE).Groups(3).Value)
+        Dim offsetValue As Long = 0
 
-        result = Reference.UnixEpoch.AddTicks(TimeSpan.TicksPerMillisecond * timeValue)
+        If Not Regex.Match(value, Patterns.JSON_VALUE).Groups(3).Value.Equals(String.Empty) Then
+            offsetValue = Convert.ToInt64(Regex.Match(value, Patterns.JSON_VALUE).Groups(3).Value)
+        End If
+
+        result = New Date(timeValue * TimeSpan.TicksPerMillisecond + Reference.UnixEpoch.Ticks, DateTimeKind.Utc)
 
         Return result
     End Function
