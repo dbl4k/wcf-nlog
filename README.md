@@ -15,7 +15,7 @@ Nothing too advanced here, more of a proof of concept.
 
 Just some stuff i'm hacking around with, including:
 
-* Using a MessageInspector within a ServiceBehavior (WCF Extensibility) to read and write [iso8601](https://en.wikipedia.org/wiki/ISO_8601), by converting to the ugly epoch-based "/Date(n)/" in transit for WCF serializions to occur.
+* Using a MessageInspector within a ServiceBehavior (WCF Extensibility) to read and write [iso8601](https://en.wikipedia.org/wiki/ISO_8601), by converting to the ugly epoch-based "/Date(n)/" in transit for WCF serialization to occur without needing a DispatchFormatter implementation.
 * Adding an <Authorized> attribute to add in custom behaviour - I don't plan to expand on this, just exhibit the basic idea.
 
 ## Example Outputs
