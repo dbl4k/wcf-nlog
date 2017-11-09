@@ -10,6 +10,14 @@ Nothing too advanced here, more of a proof of concept.
 * a simple custom set of NLog BehaviorExtensionElement, ServiceBehavior and ErrorHandler that will catch unhandled exceptions.
 * behaviour configuration in config.
 
+
+## Extra Features
+
+Just some stuff i'm hacking around with, including:
+
+* Using a MessageInspector within a ServiceBehavior (WCF Extensibility) to read and write [iso8601](https://en.wikipedia.org/wiki/ISO_8601), by converting to the ugly epoch-based "/Date(n)/" in transit for WCF serializions to occur.
+* Adding an <Authorized> attribute to add in custom behaviour - I don't plan to expand on this, just exhibit the basic idea.
+
 ## Example Outputs
 
 When pushing an invalid value, like a "?" character into an expected Date param:
