@@ -134,7 +134,7 @@ Public Class NlogMessageInspector
     End Function
 
     Private Function CloneMessage(reader As XmlDictionaryReader, message As Message) As Message
-        Dim result As Message = Message.CreateMessage(reader, Integer.MaxValue, message.Version)
+        Dim result As Message = message.CreateMessage(reader, Integer.MaxValue, message.Version)
 
         result.Properties.CopyProperties(message.Properties)
 
@@ -163,7 +163,7 @@ Public Class NlogMessageInspector
 
         ms.Position = 0
         Dim reader As XmlDictionaryReader = XmlDictionaryReader.CreateBinaryReader(ms, XmlDictionaryReaderQuotas.Max)
-        Dim newMessage As Message = Message.CreateMessage(reader, Integer.MaxValue, message.Version)
+        Dim newMessage As Message = message.CreateMessage(reader, Integer.MaxValue, message.Version)
         newMessage.Properties.CopyProperties(message.Properties)
         message = newMessage
 
@@ -210,7 +210,7 @@ Public Class NlogMessageInspector
             ' "\/Date(1509739291460+0000)\/" -> "2012-04-21T18:25:43-05:00"
             Dim regex As New Regex(JsonDateConversion.Patterns.JSON_VALUE)
             For Each match As Match In regex.Matches(body)
-                Dim dateTime As Date = JsonDateConversion.ConvertJsonDateValuetoDate(match.Groups(0).Value)
+                Dim dateTime As Date = JsonDateConversion.ConvertJsonDateValueToDate(match.Groups(0).Value)
                 Dim iso8601Value As String = JsonDateConversion.ConvertDateToIso8601String(dateTime)
 
                 body = body.Replace(match.Groups(0).Value, iso8601Value)
