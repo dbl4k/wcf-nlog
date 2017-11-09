@@ -13,6 +13,7 @@ Public Class JsonDateConversion
 
     Public Class Format
         Public Const F_JSONDATEVALUE As String = "/Date({0})/"
+        Friend Const F_ISO8601 As String = "yyyy-MM-ddTHH:mm:ss"
     End Class
 
     Public Shared Function ConvertIso8601ToDate(isodate As String) As Date
@@ -36,8 +37,8 @@ Public Class JsonDateConversion
     Friend Shared Function ConvertJsonDateValueToDate(value As String) As Date
         Dim result As Date
 
-        Dim timeValue As Long = Convert.ToInt64(Regex.Match(value, Patterns.JSON_VALUE).Groups(2))
-        Dim offsetValue As Long = Convert.ToInt64(Regex.Match(value, Patterns.JSON_VALUE).Groups(3))
+        Dim timeValue As Long = Convert.ToInt64(Regex.Match(value, Patterns.JSON_VALUE).Groups(2).Value)
+        Dim offsetValue As Long = Convert.ToInt64(Regex.Match(value, Patterns.JSON_VALUE).Groups(3).Value)
 
         result = Reference.UnixEpoch.AddTicks(TimeSpan.TicksPerMillisecond * timeValue)
 
@@ -47,7 +48,7 @@ Public Class JsonDateConversion
     Friend Shared Function ConvertDateToIso8601String(dateTime As Date) As String
         Dim result As String = Nothing
 
-        result = dateTime.ToString("yyyy-MM-ddTHH:mm:ss")
+        result = dateTime.ToString(Format.F_ISO8601)
 
         Return result
     End Function
