@@ -21,9 +21,34 @@ Public Class AuthorizedAttributeBehaviour
     End Sub
 
     Private Sub AddBindingParameters(serviceDescription As ServiceDescription, serviceHostBase As ServiceHostBase, endpoints As Collection(Of ServiceEndpoint), bindingParameters As BindingParameterCollection) Implements IServiceBehavior.AddBindingParameters
-        ' Not used
+        For Each endpoint In endpoints
+            For Each operation In endpoint.Contract.Operations
+                operation.OperationBehaviors.Add(New AuthorizedAttributeOperation())
+            Next
+        Next
     End Sub
 
 #End Region
 
+End Class
+
+
+Public Class AuthorizedAttributeOperation
+    Implements IOperationBehavior
+
+    Public Sub Validate(operationDescription As OperationDescription) Implements IOperationBehavior.Validate
+        ' not used
+    End Sub
+
+    Public Sub ApplyDispatchBehavior(operationDescription As OperationDescription, dispatchOperation As DispatchOperation) Implements IOperationBehavior.ApplyDispatchBehavior
+        ' not used
+    End Sub
+
+    Public Sub ApplyClientBehavior(operationDescription As OperationDescription, clientOperation As ClientOperation) Implements IOperationBehavior.ApplyClientBehavior
+        ' not used
+    End Sub
+
+    Public Sub AddBindingParameters(operationDescription As OperationDescription, bindingParameters As BindingParameterCollection) Implements IOperationBehavior.AddBindingParameters
+        ' not used
+    End Sub
 End Class
