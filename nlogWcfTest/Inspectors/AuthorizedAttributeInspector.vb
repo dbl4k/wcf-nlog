@@ -1,7 +1,16 @@
 ﻿Imports System.Net
 Imports System.ServiceModel.Channels
+Imports System.ServiceModel.Dispatcher
 
 Public Class AuthorizedAttributeInspector : Inherits SimpleMessageInspector
+
+    Private channelDispatcher As ChannelDispatcher
+    Private endpointDispatcher As EndpointDispatcher
+
+    Public Sub New(channelDispatcher As ChannelDispatcher, endpointDispatcher As EndpointDispatcher)
+        Me.channelDispatcher = channelDispatcher
+        Me.endpointDispatcher = endpointDispatcher
+    End Sub
 
     Public Overrides Sub ModifyBody(ByRef body As String, originalMessage As Message, isRequest As Boolean)
         'Throw New NotImplementedException()

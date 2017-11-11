@@ -11,7 +11,7 @@ Public Class AuthorizedAttributeBehaviour
     Public Sub ApplyDispatchBehavior(serviceDescription As ServiceDescription, serviceHostBase As ServiceHostBase) Implements IServiceBehavior.ApplyDispatchBehavior
         For Each chDisp As ChannelDispatcher In serviceHostBase.ChannelDispatchers
             For Each epDisp As EndpointDispatcher In chDisp.Endpoints
-                epDisp.DispatchRuntime.MessageInspectors.Add(New AuthorizedAttributeInspector())
+                epDisp.DispatchRuntime.MessageInspectors.Add(New AuthorizedAttributeInspector(chDisp, epDisp))
             Next
         Next
     End Sub
@@ -23,7 +23,7 @@ Public Class AuthorizedAttributeBehaviour
     Private Sub AddBindingParameters(serviceDescription As ServiceDescription, serviceHostBase As ServiceHostBase, endpoints As Collection(Of ServiceEndpoint), bindingParameters As BindingParameterCollection) Implements IServiceBehavior.AddBindingParameters
         For Each endpoint In endpoints
             For Each operation In endpoint.Contract.Operations
-                operation.OperationBehaviors.Add(New AuthorizedAttributeOperation())
+                operation.OperationBehaviors.Add(New AuthorizedAttributeOperation(endpoint, operation))
             Next
         Next
     End Sub
@@ -35,6 +35,14 @@ End Class
 
 Public Class AuthorizedAttributeOperation
     Implements IOperationBehavior
+
+    Private endpoint As ServiceEndpoint
+    Private operation As OperationDescription
+
+    Public Sub New(endpoint As ServiceEndpoint, operation As OperationDescription)
+        Me.endpoint = endpoint
+        Me.operation = operation
+    End Sub
 
     Public Sub Validate(operationDescription As OperationDescription) Implements IOperationBehavior.Validate
         ' not used
