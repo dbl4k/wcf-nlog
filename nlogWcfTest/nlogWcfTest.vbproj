@@ -107,6 +107,7 @@
     <Compile Include="BehaviourExtensions\NlogMessageInspectorBehaviourExtensionElement.vb" />
     <Compile Include="BehaviourExtensions\NlogBehaviourExtensionElement.vb" />
     <Compile Include="Inspectors\AuthorizedAttributeInspector.vb" />
+    <Compile Include="Inspectors\SimpleMessageInspector.vb" />
     <Compile Include="IRestfulJsonService.vb" />
     <Compile Include="RestfulJsonService.svc.vb">
       <DependentUpon>RestfulJsonService.svc</DependentUpon>
