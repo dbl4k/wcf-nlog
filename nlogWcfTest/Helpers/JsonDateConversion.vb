@@ -14,7 +14,7 @@ Public Class JsonDateConversion
 
     Public Class Format
         Public Const F_JSONDATEVALUE As String = "/Date({0}-0000)/"
-        Friend Const F_ISO8601 As String = "yyyy-MM-ddTHH:mm:ss"
+        Public Shared F_ISO8601 As String = CultureInfo.InvariantCulture.DateTimeFormat.SortableDateTimePattern
     End Class
 
     Public Shared Function ConvertIso8601ToDate(isodate As String) As Date
@@ -53,7 +53,7 @@ Public Class JsonDateConversion
     Friend Shared Function ConvertDateToIso8601String(dateTime As Date) As String
         Dim result As String = Nothing
 
-        result = dateTime.ToLocalTime.ToString(Format.F_ISO8601)
+        result = dateTime.ToString(Format.F_ISO8601)
 
         Return result
     End Function
