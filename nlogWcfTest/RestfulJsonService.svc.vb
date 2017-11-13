@@ -15,6 +15,7 @@ Public Class RestfulJsonService
 
     ' GET : http://localhost:58958/api/Entities
     <WebInvoke(Method:="GET", UriTemplate:="entities", RequestFormat:=WebMessageFormat.Json, ResponseFormat:=WebMessageFormat.Json)>
+    <Authorized>
     Public Function Get_Entities() As Entity() Implements IRestfulJsonService.Get_Entities
         Dim result As New List(Of Entity)
 
@@ -27,6 +28,7 @@ Public Class RestfulJsonService
 
     ' GET : http://localhost:58958/api/Entities/5
     <WebInvoke(Method:="GET", UriTemplate:="entities/{id}", RequestFormat:=WebMessageFormat.Json, ResponseFormat:=WebMessageFormat.Json)>
+    <Authorized>
     Public Function Get_Entity_ById(id As String) As Entity Implements IRestfulJsonService.Get_Entity_ById
         Dim result As Entity = Nothing
 
@@ -53,6 +55,7 @@ Public Class RestfulJsonService
 
     ' POST : http://localhost:58958/api/Entities
     <WebInvoke(Method:="POST", UriTemplate:="entities", RequestFormat:=WebMessageFormat.Json, ResponseFormat:=WebMessageFormat.Json)>
+    <Authorized>
     Public Function Post_Entity(entity As Entity) As Entity Implements IRestfulJsonService.Post_Entity
         Dim result As Entity = entity
 
@@ -63,7 +66,6 @@ Public Class RestfulJsonService
 
     ' POST : http://localhost:58958/api/Customer/666/FeedbackMessages
     <WebInvoke(Method:="POST", UriTemplate:="customer/{customerId}/feedbackmessages", RequestFormat:=WebMessageFormat.Json, ResponseFormat:=WebMessageFormat.Json)>
-    <Authorized>
     Public Function Post_Customer_FeedbackMessage(customerId As String, entity As FeedbackMessage) As FeedbackMessage Implements IRestfulJsonService.Post_Customer_FeedbackMessage
         entity.Subject &= " all good!"
         entity.ReceivedDate = New Date(2017, 6, 5).AddHours(5).AddMinutes(20)
