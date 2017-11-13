@@ -1,10 +1,11 @@
 ﻿Imports System.Collections.ObjectModel
+Imports System.Reflection
 Imports System.ServiceModel.Channels
 Imports System.ServiceModel.Description
 Imports System.ServiceModel.Dispatcher
 
 Public Class AuthorizedAttributeBehaviour
-    Implements IServiceBehavior
+    Implements IServiceBehavior, IEndpointBehavior
 
 #Region "IServiceBehavior Members"
 
@@ -16,16 +17,38 @@ Public Class AuthorizedAttributeBehaviour
         Next
     End Sub
 
+    Public Sub ApplyDispatchBehavior(endpoint As ServiceEndpoint, endpointDispatcher As EndpointDispatcher) Implements IEndpointBehavior.ApplyDispatchBehavior
+        For Each operation In endpoint.Contract.Operations
+            Dim declaringContract As ContractDescription = operation.DeclaringContract
+            Dim operationBehaviour As New AuthorizedAttributeOperation(endpoint, operation)
+
+            With operation.OperationBehaviors
+
+                .Add(operationBehaviour)
+
+            End With
+
+        Next
+    End Sub
+
     Public Sub Validate(serviceDescription As ServiceDescription, serviceHostBase As ServiceHostBase) Implements IServiceBehavior.Validate
         ' Not used
     End Sub
 
+    Public Sub Validate(endpoint As ServiceEndpoint) Implements IEndpointBehavior.Validate
+        '  Throw New NotImplementedException()
+    End Sub
+
+    Public Sub AddBindingParameters(endpoint As ServiceEndpoint, bindingParameters As BindingParameterCollection) Implements IEndpointBehavior.AddBindingParameters
+        ' Throw New NotImplementedException()
+    End Sub
+
+    Public Sub ApplyClientBehavior(endpoint As ServiceEndpoint, clientRuntime As ClientRuntime) Implements IEndpointBehavior.ApplyClientBehavior
+        'Throw New NotImplementedException()
+    End Sub
+
     Private Sub AddBindingParameters(serviceDescription As ServiceDescription, serviceHostBase As ServiceHostBase, endpoints As Collection(Of ServiceEndpoint), bindingParameters As BindingParameterCollection) Implements IServiceBehavior.AddBindingParameters
-        For Each endpoint In endpoints
-            For Each operation In endpoint.Contract.Operations
-                operation.OperationBehaviors.Add(New AuthorizedAttributeOperation(endpoint, operation))
-            Next
-        Next
+        '
     End Sub
 
 #End Region
@@ -49,7 +72,16 @@ Public Class AuthorizedAttributeOperation
     End Sub
 
     Public Sub ApplyDispatchBehavior(operationDescription As OperationDescription, dispatchOperation As DispatchOperation) Implements IOperationBehavior.ApplyDispatchBehavior
-        ' not used
+        Dim method As MethodInfo = operationDescription.SyncMethod
+
+        Dim hasAttribute As Boolean = method.
+            GetCustomAttributes.ToList.
+            Select(Function(n) n.GetType Is GetType(AuthorizationStoreRoleProvider)).Any
+
+        If hasAttribute Then
+            ' Throw New HttpException(401, "Unauthorized access")
+        End If
+
     End Sub
 
     Public Sub ApplyClientBehavior(operationDescription As OperationDescription, clientOperation As ClientOperation) Implements IOperationBehavior.ApplyClientBehavior
